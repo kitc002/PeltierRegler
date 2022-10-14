@@ -3,7 +3,7 @@
 //          MotorShield mit Peltierelement
 //          Regler für Kühlung und Heizung
 //
-//          Version: v0.1
+//          Version: v0.2
 //          (c) Kapeller Markus 
 //
 
@@ -82,7 +82,7 @@ void setup(void) {
   motor.begin();
 
   Serial.begin(9600); //Starten der seriellen Kommunikation mit 9600 baud
-  Serial.println("Outh:,Outc");         // Legend for Serialplot
+  Serial.println("Outh: ,Outc: ");         // Legend for Serialplot
   //Serial.println("Temperatursensor - DS18B20"); 
   //Serial.println("PID-Regler mit Peltierelemt"); 
   sensors.begin(); //Starten der Kommunikation mit dem Sensor
@@ -179,16 +179,19 @@ void loop(void){
    lcd.print(" Oh: ");
     if (Outputh < 10) lcd.print(" ");
    lcd.print(Outputh);
+   lcd.print(" ");   
    lcd.setCursor(13, 1);
    lcd.print("Oc: ");
     if (Outputc < 10) lcd.print(" ");
    lcd.print(Outputc);
+   lcd.print(" ");
    lcd.setCursor(25, 1);
    lcd.print("Out: ");
      if (((Outputh - Outputc) >= 0)&&((Outputh - Outputc) < 10)) lcd.print(" ");
    lcd.print(Outputh - Outputc);
    lcd.print("  ");
-    
+
+   lcd.setCursor(37, 1);
      if ((Outputh - Outputc) >= 0) lcd.print("+ ");
      else if ((Outputh - Outputc) < 0)  lcd.print("- ");
 
