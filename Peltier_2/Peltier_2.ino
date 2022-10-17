@@ -29,8 +29,8 @@ float IstTemp;    // IstTemperatur
 float DiffTemp;   // Temperaturdifferenz
 
 // Tuning parameters 
-float Kp=2.5; //Initial Proportional Gain 
-float Ki=25; //Initial Integral Gain 
+float Kp=8; //Initial Proportional Gain 
+float Ki=12; //Initial Integral Gain 
 float Kd=0; //Initial Differential Gain 
 
 double Setpointc, Inputc, Outputc;  // Regler für Kühlung 
@@ -81,10 +81,14 @@ void setup(void) {
   lcd.clear();
   motor.begin();
 
+  // Ausgabe Schnittstelle
   Serial.begin(9600); //Starten der seriellen Kommunikation mit 9600 baud
-  Serial.println("Outh: ,Outc: ");         // Legend for Serialplot
+  //Serial.println("Outh: ,Outc: ");        // Legend for Serialplot
+  Serial.println("Output:, DiffTemp: ");          // Legend for Serialplot
   //Serial.println("Temperatursensor - DS18B20"); 
   //Serial.println("PID-Regler mit Peltierelemt"); 
+  
+  // Start Messungen
   sensors.begin(); //Starten der Kommunikation mit dem Sensor
   sensorCount = sensors.getDS18Count(); //Lesen der Anzahl der angeschlossenen Temperatursensoren.
 
@@ -124,29 +128,13 @@ void loop(void){
    IstTemp = sensors.getTempCByIndex(i);
    DiffTemp = IstTemp-SollTemp;
    
-   /*
-   // kühlen
-   if (DiffTemp > 0) {
-      Input = SollTemp;
-      Setpoint = IstTemp;
-      Faktor = -1;
-   }
-   // heizen
-   if (DiffTemp < 0) {
-      Input = IstTemp;
-      Setpoint = SollTemp;
-      Faktor = 1;
-   }
-   */
   
   // Soll- und Istwerte für die Regler
   Inputc = SollTemp;
   Setpointc = IstTemp;
   Inputh = IstTemp;
   Setpointh = SollTemp;
-
-    
- }
+  }
     
    lcd.setCursor(0, 0);
    lcd.print("Soll ");
@@ -197,9 +185,9 @@ void loop(void){
 
    //printValue( "Outc ", Outputc);
    //printValue( "Outh ", Outputh);
-  Serial.print(Outputh);
+  Serial.print(Outputh-Outputc);
   Serial.print(",");
-  Serial.println(Outputc);
+  Serial.println(DiffTemp);  
    
 } 
 
